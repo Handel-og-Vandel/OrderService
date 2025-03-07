@@ -2,6 +2,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHttpClient("ShippingService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ShippingServiceUrl"] ??
+        throw new InvalidOperationException("URL for Shipping Service is missing in configuration"));    
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

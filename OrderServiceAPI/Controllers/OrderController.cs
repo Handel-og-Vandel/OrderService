@@ -9,13 +9,15 @@ namespace MyApp.Namespace
     public class OrderController : ControllerBase
     {
         private readonly ILogger<OrderController> _logger;
-
+        private readonly IHttpClientFactory _clientFactory;
         private static List<Order> _orders = new List<Order>();
 
-        public OrderController(ILogger<OrderController> logger)
+        public OrderController(ILogger<OrderController> logger, IHttpClientFactory clientFactory)
         {
             _logger = logger;
             _logger.LogInformation("OrderController initialized.");
+
+            _clientFactory = clientFactory;
         }
 
         [HttpPost]
@@ -54,6 +56,20 @@ namespace MyApp.Namespace
 
                 // Simulate saving to a database or similar
                 _orders.Add(order);
+
+                // POST to ShippingService
+                var client = _clientFactory.CreateClient("ShippingService");
+                var response = client.PostAsJsonAsync("api/shipping", order).Result;
+
+                if(response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Order sent to ShippingService successfully.");
+                }
+                else
+                {
+                    _logger.LogError("Error sending order to ShippingService.");
+                    return StatusCode(500, "Error sending order to ShippingService.");
+                }
 
                 return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, order);
             }

@@ -1,0 +1,24 @@
+
+services:
+  orderserviceapi:
+    image: orderserviceapi
+    build:
+      context: ../
+      dockerfile: OrderServiceAPI/Dockerfile
+    container_name: orderserviceapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ShippingServiceURL=http://shippingservicemock:8000
+    ports:
+      - 5002:5002
+    depends_on:
+      - shippingservicemock
+  
+  shippingservicemock:
+    image: alpine:latest
+    container_name: shippingservicemock
+    command: ["sh", "-c", 
+        "while true; do (echo -e 'HTTP/1.1 200 OK\r\nContent-Length: 0\r\nConnection: keep-alive\r\n\r\n' ) \
+        | nc -lp 8000 -k; echo -e '\r\n'; done" ]
+    ports:
+      - "8081:8000"
