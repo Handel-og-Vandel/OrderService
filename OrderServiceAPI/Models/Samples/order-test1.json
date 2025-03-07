@@ -1,0 +1,32 @@
+{
+    "orderId": "8f5f2e7a-ff26-4664-820a-f641a3510e98",
+    "customerId": "ec122946-f5e1-4a6d-ab41-82941471c260",
+    "orderDate": "2025-03-07T09:06:00Z",
+    "items": [
+      {
+        "productId": "6e926949-ca04-4db7-8a89-b27df6bf7c7e",
+        "quantity": 2,
+        "price": 2.50
+      },
+      {
+        "productId": "0400fe00-0738-44fc-a2a0-e9c7a8942c4e",
+        "quantity": 1,
+        "price": 3.75
+      },
+      {
+        "productId": "20d932f1-0880-4fbb-8b4c-273794385a49",
+        "quantity": 3,
+        "price": 1.25
+      }
+    ],
+    "shippingAddress": {
+      "street": "123 Main Street",
+      "city": "Anytown",
+      "state": "CA",
+      "zip": "12345",
+      "country": "USA"
+    },
+    "paymentMethod": "credit_card",
+    "totalAmount": 13.75,
+    "orderStatus": "pending"
+  }

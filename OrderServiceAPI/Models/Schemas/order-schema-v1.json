@@ -1,0 +1,107 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Order",
+    "description": "Schema for a web site purchase order",
+    "type": "object",
+    "properties": {
+      "orderId": {
+        "description": "Unique identifier for the order.",
+        "type": "string",
+        "format": "uuid"
+      },
+      "customerId": {
+        "description": "Unique identifier for the customer.",
+        "type": "string",
+        "format": "uuid"
+      },
+      "orderDate": {
+        "description": "Date and time the order was placed.",
+        "type": "string",
+        "format": "date-time"
+      },
+      "items": {
+        "description": "List of items in the order.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "productId": {
+              "description": "Unique identifier for the product.",
+              "type": "string",
+              "format": "uuid"
+            },
+            "quantity": {
+              "description": "Quantity of the product ordered.",
+              "type": "integer",
+              "minimum": 1
+            },
+            "price": {
+              "description": "Price of the product at the time of order.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "productId",
+            "quantity",
+            "price"
+          ]
+        },
+        "minItems": 1
+      },
+      "shippingAddress": {
+        "description": "Shipping address for the order.",
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "postalcode": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "street",
+          "city",
+          "postalcode",
+          "country"
+        ]
+      },
+      "paymentMethod": {
+        "description": "Payment method used for the order.",
+        "type": "string",
+        "enum": ["credit_card", "paypal", "bank_transfer"]
+      },
+      "totalAmount": {
+        "description": "Total amount of the order.",
+        "type": "number",
+        "format": "float",
+        "minimum": 0
+      },
+      "orderStatus": {
+        "description": "Current status of the order.",
+        "type": "string",
+        "enum": ["pending", "processing", "shipped", "delivered", "cancelled"]
+      }
+    },
+    "required": [
+      "orderId",
+      "customerId",
+      "orderDate",
+      "items",
+      "shippingAddress",
+      "paymentMethod",
+      "totalAmount",
+      "orderStatus"
+    ]
+  }
