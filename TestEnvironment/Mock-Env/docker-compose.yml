@@ -3,14 +3,15 @@ services:
   orderserviceapi:
     image: orderserviceapi
     build:
-      context: ../
+      context: ../../
       dockerfile: OrderServiceAPI/Dockerfile
     container_name: orderserviceapi
     environment:
+      - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_ENVIRONMENT=Development
       - ShippingServiceURL=http://shippingservicemock:8000
     ports:
-      - 5002:5002
+      - 8080:8080
     depends_on:
       - shippingservicemock
   
