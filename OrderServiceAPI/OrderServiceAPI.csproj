@@ -9,14 +9,19 @@
     <Copyright>2025 HTU Aps</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <InformationalVersion>1.0.2</InformationalVersion>
+    <InformationalVersion>1.2.0</InformationalVersion>
     <Description>
       1.0.0 Updated with semantic versioning
     </Description>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

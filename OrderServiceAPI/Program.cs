@@ -1,31 +1,54 @@
-var builder = WebApplication.CreateBuilder(args);
+using NLog;
+using NLog.Web;
 
-// Add services to the container.
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
+      .GetCurrentClassLogger();
+logger.Debug("Start order service");
 
-builder.Services.AddHttpClient("ShippingService", client =>
+try
 {
-    client.BaseAddress = new Uri(builder.Configuration["ShippingServiceUrl"] ??
-        throw new InvalidOperationException("URL for Shipping Service is missing in configuration"));    
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    // Add services to the container.
 
-var app = builder.Build();
+    builder.Services.AddHttpClient("ShippingService", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["ShippingServiceUrl"] ??
+            throw new InvalidOperationException("URL for Shipping Service is missing in configuration"));
+    });
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    builder.Services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+}
+catch (Exception ex)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    logger.Error(ex, "Stopped program because of exception");
+    throw;
+}
+finally
+{
+    NLog.LogManager.Shutdown();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

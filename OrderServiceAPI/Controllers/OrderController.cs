@@ -3,7 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
-namespace MyApp.Namespace
+namespace OrderServiceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,9 +16,13 @@ namespace MyApp.Namespace
         public OrderController(ILogger<OrderController> logger, IHttpClientFactory clientFactory)
         {
             _logger = logger;
-            _logger.LogInformation("OrderController initialized.");
 
             _clientFactory = clientFactory;
+
+            var hostName = System.Net.Dns.GetHostName();
+            var ips = System.Net.Dns.GetHostAddresses(hostName);
+            var _ipaddr = ips.First().MapToIPv4().ToString();
+            _logger.LogInformation(1, $"XYZ Service responding from {_ipaddr}");
         }
 
         [HttpPost]
