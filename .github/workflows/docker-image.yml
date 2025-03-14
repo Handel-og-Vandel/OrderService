@@ -33,7 +33,7 @@ jobs:
         uses: kzrnm/get-net-sdk-project-versions-action@v2
         id: get-version
         with:
-          proj-path: OrderServiceAPI/OrderService.csproj
+          proj-path: OrderServiceAPI/OrderServiceAPI.csproj
     
       - name: Build the Docker image
         run: docker build . -f OrderServiceAPI/Dockerfile -t ${DOCKER_USER}/${IMAGE_NAME}:${{steps.get-version.outputs.informational-version}}
