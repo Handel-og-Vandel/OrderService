@@ -37,8 +37,8 @@ jobs:
     
       - name: Build and push the Docker image with version from csproj file
         run: |
-          docker build . -f OrderServiceAPI/Dockerfile -t ${IMAGE_VERSIONED_NAME}
-          docker push ${IMAGE_VERSIONED_NAME}
+          docker build . -f OrderServiceAPI/Dockerfile -t $IMAGE_VERSIONED_NAME
+          docker push $IMAGE_VERSIONED_NAME
         env:
           VERSIONED_IMAGE_NAME: ${{env.FULL_IMAGE_NAME}}:${{steps.get-version.outputs.informational-version}}
 
