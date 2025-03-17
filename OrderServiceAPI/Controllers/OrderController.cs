@@ -22,7 +22,8 @@ namespace OrderServiceAPI.Controllers
             var hostName = System.Net.Dns.GetHostName();
             var ips = System.Net.Dns.GetHostAddresses(hostName);
             var _ipaddr = ips.First().MapToIPv4().ToString();
-            _logger.LogInformation(1, $"XYZ Service responding from {_ipaddr}");
+
+            _logger.LogInformation(1, $"Order Service running on IP: {_ipaddr}");
         }
 
         [HttpPost]
@@ -30,8 +31,9 @@ namespace OrderServiceAPI.Controllers
         {
             if (order == null)
             {
-                _logger.LogError("Order object is null.");
-                return BadRequest("Order object is null");
+                var msg = "Order object is null.";
+                _logger.LogError(msg);
+                return BadRequest(msg);
             }
 
             var validationContext = new ValidationContext(order, null, null);
@@ -50,8 +52,9 @@ namespace OrderServiceAPI.Controllers
 
             if (order.Items.Any(item => item.Quantity <= 0))
             {
-                _logger.LogError("Item quantities must be greater than zero.");
-                return BadRequest("Item quantities must be greater than zero.");
+                var msg = "Item quantities must be greater than zero.";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
 
             try
@@ -72,16 +75,18 @@ namespace OrderServiceAPI.Controllers
                 }
                 else
                 {
-                    _logger.LogError("Error sending order to ShippingService.");
-                    return StatusCode(500, "Error sending order to ShippingService.");
+                    var msg = "Error sending order to ShippingService.";
+                    _logger.LogError(msg);
+                    return StatusCode(500, msg);
                 }
 
                 return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, order);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error processing order.");
-                return StatusCode(500, "Internal server error");
+                var msg = "Error processing order.";
+                _logger.LogError(ex, msg);                
+                return StatusCode(500, msg);
             }
         }
 
@@ -118,9 +123,9 @@ namespace OrderServiceAPI.Controllers
                 { "service", "HaaV Order Service" }
             };
             
-            var ver = FileVersionInfo.GetVersionInfo(typeof(Program).Assembly.Location).ProductVersion;
-            
+            var ver = FileVersionInfo.GetVersionInfo(typeof(Program).Assembly.Location).ProductVersion ?? "Unknown";
             properties.Add("version", ver!);
+
             try
             {
                 var hostName = System.Net.Dns.GetHostName();
