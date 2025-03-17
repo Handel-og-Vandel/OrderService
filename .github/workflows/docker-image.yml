@@ -18,6 +18,7 @@ jobs:
     env:
       DOCKER_USER: ${{secrets.DOCKER_USER}}
       IMAGE_NAME: order-service
+      FULL_IMAGE_NAME: ${DOCKER_USER}/${IMAGE_NAME}
 
     steps:
       - uses: actions/checkout@v4
@@ -36,14 +37,14 @@ jobs:
     
       - name: Build and push the Docker image with version from csproj file
         run: |
-          docker build . -f OrderServiceAPI/Dockerfile -t ${VERSIONED_IMAGE_NAME}
-          docker push ${VERSIONED_IMAGE_NAME}
+          docker build . -f OrderServiceAPI/Dockerfile -t ${IMAGE_VERSIONED_NAME}
+          docker push ${IMAGE_VERSIONED_NAME}
         env:
-          VERSIONED_IMAGE_NAME: ${{env.DOCKER_USER}}/${{env.IMAGE_NAME}}:${{steps.get-version.outputs.informational-version}}
+          VERSIONED_IMAGE_NAME: ${{env.FULL_IMAGE_NAME}}:${{steps.get-version.outputs.informational-version}}
 
       - name: Tag image as latest and push to Docker Hub
         run: |
-          docker tag ${DOCKER_USER}/${IMAGE_NAME}:${{steps.get-version.outputs.informational-version}} ${LASTEST_IMAGE_NAME}
+          docker tag ${{env.FULL_IMAGE_NAME}}:${{steps.get-version.outputs.informational-version}} ${LASTEST_IMAGE_NAME}
           docker push ${LATEST_IMAGE_NAME}
         env:
-          LASTEST_IMAGE_NAME: ${{env.DOCKER_USER}}/${{env.IMAGE_NAME}}:latest
+          LASTEST_IMAGE_NAME: ${{env.FULL_IMAGE_NAME}}:latest
