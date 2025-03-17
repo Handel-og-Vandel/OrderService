@@ -16,9 +16,8 @@ jobs:
       attestations: write
       id-token: write
     env:
-      DOCKER_USER: ${{secrets.DOCKER_USER}}
       IMAGE_NAME: order-service
-      FULL_IMAGE_NAME: ${DOCKER_USER}/${IMAGE_NAME}
+      FULL_IMAGE_NAME: ${{secrets.DOCKER_USER}}/${IMAGE_NAME}
 
     steps:
       - uses: actions/checkout@v4
