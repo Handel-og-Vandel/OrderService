@@ -42,8 +42,8 @@ jobs:
 
       - name: Tag image as latest and push to Docker Hub
         run: |
-          docker tag ${{env.VERSIONED_IMAGE_NAME}} ${{env.LASTEST_IMAGE_NAME}}
-          docker push ${{env.LATEST_IMAGE_NAME}}
+          docker tag $VERSIONED_IMAGE_NAME $LASTEST_IMAGE_NAME
+          docker push $LATEST_IMAGE_NAME
         env:
           VERSIONED_IMAGE_NAME: ${{secrets.DOCKER_USER}}/${{env.IMAGE_NAME}}:${{steps.get-version.outputs.informational-version}}
           LASTEST_IMAGE_NAME: ${{secrets.DOCKER_USER}}/${{env.IMAGE_NAME}}:latest
