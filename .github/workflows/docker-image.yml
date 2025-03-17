@@ -17,7 +17,7 @@ jobs:
       id-token: write
     env:
       IMAGE_NAME: order-service
-      FULL_IMAGE_NAME: ${{secrets.DOCKER_USER}}/${IMAGE_NAME}
+      FULL_IMAGE_NAME: ${{secrets.DOCKER_USER}}/${{vars.IMAGE_NAME}}
 
     steps:
       - uses: actions/checkout@v4
